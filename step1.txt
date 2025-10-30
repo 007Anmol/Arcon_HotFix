@@ -1,0 +1,19 @@
+@echo off
+setlocal
+
+:: === Source and Destination ===
+set "SOURCE=E:\Jenkins\QA\Publish\ACMO\41\ARCON Web Components\ARCOSClientManagerOnline"
+set "DEST=E:\DUMMY_Diff.24\new"
+
+:: === Create destination folder if it doesn't exist ===
+if not exist "%DEST%" (
+    mkdir "%DEST%"
+)
+
+:: === Copy folder ===
+echo Copying "%SOURCE%" to "%DEST%"...
+xcopy "%SOURCE%\*" "%DEST%\ARCOSClientManagerOnline\" /E /I /Y
+
+echo.
+echo === Copy Complete ===
+pause

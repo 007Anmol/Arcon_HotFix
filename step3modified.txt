@@ -1,0 +1,43 @@
+@echo off
+setlocal enabledelayedexpansion
+
+:: === Configuration ===
+set "PARENT=E:\DUMMY_Diff.24\final"
+set "BASENAME=ARCOSClientManagerOnline"
+set "SOURCE=%PARENT%\%BASENAME%"
+set "COPYNAME=%BASENAME%COPY"
+set "OLDNAME=%BASENAME%OLD"
+set "FOLDER1=C:\Users\Administrator\Downloads\A"
+set "FOLDER2=C:\Users\Administrator\Downloads\B"
+
+:: Step 1: delete SAML and DBSetting from SOURCE
+echo [1] Removing unwanted folders from "%SOURCE%"...	
+if exist "%SOURCE%\SAML"    rd /S /Q "%SOURCE%\SAML"
+if exist "%SOURCE%\DBSetting" rd /S /Q "%SOURCE%\DBSetting"
+
+:: Step 2: make a copy with “COPY” suffix
+echo [2] Copying modified folder to "%PARENT%\%COPYNAME%"...
+xcopy "%SOURCE%\*" "%PARENT%\%COPYNAME%\" /E /I /Y >nul
+
+
+:: Step 3: rename the original folder to “OLD”
+echo [3] Renaming original "%BASENAME%" to "%OLDNAME%"...
+rename "%SOURCE%" "%OLDNAME%"
+
+
+:: Step 4: remove “COPY” from the copied folder’s name
+echo [4] Renaming "%COPYNAME%" back to "%BASENAME%"...
+rename "%PARENT%\%COPYNAME%" "%BASENAME%"
+
+
+:: Step 5: paste the final folder into folder_1 and folder_2
+set "NEWPATH=%PARENT%\%BASENAME%"
+echo [5] Deploying "%NEWPATH%" to:
+echo     • %FOLDER1%
+echo     • %FOLDER2%
+xcopy "%NEWPATH%\*" "%FOLDER1%\%BASENAME%\" /E /I /Y >nul
+xcopy "%NEWPATH%\*" "%FOLDER2%\%BASENAME%\" /E /I /Y >nul
+
+echo.
+echo === All done! ===
+pause
